@@ -45,7 +45,7 @@ public class LoginPageTest extends BaseTest{
 		
 	}
 	
-	@Description("Checking open cart login page URL ...")
+	@Description("Checking open cart login page URL")
 	@Severity(SeverityLevel.NORMAL)
 	@Owner("TDIT")
 	@Test(description = "URL test")
