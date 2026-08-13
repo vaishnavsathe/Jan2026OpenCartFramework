@@ -1,0 +1,7 @@
+package com.qa.OpenCart.pages;
+
+public class RestTusharPage {
+	public static void main(String[] args) {
+		System.out.println("Rest Tushar code");
+	}
+}
