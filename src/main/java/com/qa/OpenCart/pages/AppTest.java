@@ -1,16 +1,14 @@
 package com.qa.OpenCart.pages;
 
-public class AppTest {
-
-    public void login() {
-        System.out.println("AppTest - Login");
+public class AppTest 
+{
+    public void openApp() 
+    {
+        System.out.println("Application Opened");
     }
 
-    public void searchProduct() {
-        System.out.println("AppTest - Search Product");
-    }
-
-    public void addToCart() {
-        System.out.println("AppTest - Add Product to Cart");
+    public void login() 
+    {
+        System.out.println("Login Successful");
     }
 }
