@@ -103,7 +103,7 @@
 					<forkCount>3</forkCount>
 					<reuseForks>true</reuseForks>
 					<suiteXmlFiles>
-						<suiteXmlFile>src/test/resources/TestRunners/SanityTest_Chrome.xml</suiteXmlFile>
+						<suiteXmlFile>src/test/resources/TestRunners/RegressionTest_Chrome.xml</suiteXmlFile>
 					</suiteXmlFiles>
 
 					<argLine>
