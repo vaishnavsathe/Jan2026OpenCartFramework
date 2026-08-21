@@ -41,7 +41,7 @@
 	<test name="Product Info Test">
 		<parameter name="browser" value="chrome" />
 		<classes>
-			<class name="com.qa.OpenCart.tests.ProductInfoPageTest" />
+			<class name="com.qa.OpenCart.tests.ProductInfoTest" />
 		</classes>
 	</test>
 
@@ -55,7 +55,7 @@
 	<test name="Search Results Test">
 		<parameter name="browser" value="chrome" />
 		<classes>
-			<class name="com.qa.OpenCart.tests.SearchResultsPageTest" />
+			<class name="com.qa.OpenCart.tests.SearchResultsTest" />
 		</classes>
 	</test>
  -->
