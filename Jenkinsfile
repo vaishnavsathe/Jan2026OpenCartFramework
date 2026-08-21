@@ -1,59 +1,104 @@
-pipeline {
+pipeline 
+{
     agent any
+    
+    tools{
+        maven 'maven'
+        }
 
-    stages {
-        stage("Build") {
-            steps {
-                echo "build the project"
+    stages 
+    {
+        stage('Build') 
+        {
+            steps
+            {
+                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+            post 
+            {
+                success
+                {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target/*.jar'
+                }
             }
         }
 
-        stage("Run Unit Test") {
+       stage("Deploy to QA"){
+            steps{
+                echo("deploy to qa done")
+            }
+        }      
+                
+        stage('Regression Automation Tests') {
             steps {
-                echo "run UTs"
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    git 'https://github.com/vaishnavsathe/Jan2026OpenCartFramework.git'
+                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/TestRunners/RegressionTest_Chrome.xml -Denv=qa"
+                    
+                }
             }
         }
-
-        stage("Run Integration Test") {
-            steps {
-                echo "run ITs"
+                
+        stage('Publish Allure Reports') {
+           steps {
+                script {
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: '/allure-results']]
+                    ])
+                }
             }
         }
-
-        stage("Deploy to Dev") {
-            steps {
-                echo "deploy to dev"
+          
+        stage('Publish ChainTest Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: true, 
+                                  reportDir: 'target/chaintest', 
+                                  reportFiles: 'Index.html', 
+                                  reportName: 'HTML Regression ChainTest Report', 
+                                  reportTitles: ''])
             }
         }
-
-         stage("Deploy to QA") {
-            steps {
-                echo "Deploy to QA"
+        
+        stage("Deploy to UAT"){
+            steps{
+                echo("deploy to UAT")
             }
         }
-
-        stage("Run regression test cases on QA") {
+        
+        stage('Sanity Automation Test') {
             steps {
-                echo "Run test cases on QA"
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    git 'https://github.com/vaishnavsathe/Jan2026OpenCartFramework.git'
+                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/TestRunners/SanityTest_Chrome.xml -Denv=uat"
+                    
+                }
             }
         }
-
-        stage("Deploy to Stage") {
-            steps {
-                echo "Deploy to Stage"
+        
+        stage('Publish sanity ChainTest Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: true, 
+                                  reportDir: 'target/chaintest', 
+                                  reportFiles: 'Index.html', 
+                                  reportName: 'HTML Sanity ChainTest Report', 
+                                  reportTitles: ''])
             }
         }
-
-        stage("Run sanity test cases on Stage") {
-            steps {
-                echo "Run sanity test cases on Stage"
+        
+        stage("Deploy to PROD"){
+            steps{
+                echo("deploy to PROD")
             }
-        }
-
-        stage("Deploy to PROD") {
-            steps {
-                echo "Deploy to PROD"
-            }
-        }
+        }   
     }
 }
